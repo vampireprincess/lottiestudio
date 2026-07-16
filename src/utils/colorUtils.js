@@ -144,7 +144,7 @@ export function randomColorInRange({ hue, hueRange = 30, satMin = 60, satMax = 1
 export function gradientToCSS(gradient, width = 100, height = 100) {
   if (!gradient) return 'transparent';
   
-  const stops = (gradient.stops || [])
+  const stops = ([...(gradient.stops || [])])
     .sort((a, b) => a.position - b.position)
     .map(stop => `${colorToCSS(stop.color)} ${stop.position * 100}%`)
     .join(', ');

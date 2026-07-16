@@ -57,6 +57,11 @@ export function CanvasOverlay({ fitToScreen }) {
   const [eraserSize, setEraserSize] = useState(20);
   const [eraserShape, setEraserShape] = useState('circle'); // circle | square
   const [eraserPos, setEraserPos] = useState(null);
+  const [maskBrushMode, setMaskBrushMode] = useState('add'); // add | subtract
+  const [maskBrushSize, setMaskBrushSize] = useState(20);
+  const [maskBrushSmoothing, setMaskBrushSmoothing] = useState(1);
+  const [maskBrushFeather, setMaskBrushFeather] = useState(2);
+  const [maskBrushOpacity, setMaskBrushOpacity] = useState(1);
   const isPencilDrawing = useRef(false);
   const isZoomDragging = useRef(false);
   const zoomStartX = useRef(0);
@@ -389,8 +394,13 @@ export function CanvasOverlay({ fitToScreen }) {
             const newMask = {
               id: `mask-brush-${Date.now()}`,
               name: 'Brush Mask',
-              mode: 'add', inverted: false, feather: 0, expansion: 0, opacity: 1,
-              pathData, animated: false,
+              mode: maskBrushMode,
+              inverted: false,
+              feather: maskBrushFeather,
+              expansion: 0,
+              opacity: maskBrushOpacity,
+              pathData,
+              animated: false,
             };
             store.updateLayer(selectedLayerIds[0], {
               masks: [...(targetLayer.masks || []), newMask],
@@ -505,6 +515,33 @@ export function CanvasOverlay({ fitToScreen }) {
             onChange={e => setEraserSize(parseInt(e.target.value))}
             className="w-20 h-1" style={{ accentColor: '#7b68ee' }} />
           <span className="text-xs text-[#9090a8] w-6">{eraserSize}</span>
+        </div>
+      )}
+
+      {/* Mask Brush settings toolbar */}
+      {tool === 'maskBrush' && (
+        <div className="absolute top-2 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3 px-4 py-2 rounded-xl shadow-xl"
+          style={{ background: '#1a1a22', border: '1px solid #3a3a50' }}>
+          <span className="text-xs text-[#9090a8]">Mask:</span>
+          <select value={maskBrushMode} onChange={e => setMaskBrushMode(e.target.value)}
+            className="input text-xs px-1 py-0.5">
+            <option value="add">Reveal (Add)</option>
+            <option value="subtract">Hide (Subtract)</option>
+          </select>
+          <span className="text-xs text-[#5a5a70]">Size:</span>
+          <input type="range" min={4} max={80} value={maskBrushSize}
+            onChange={e => setMaskBrushSize(parseInt(e.target.value))}
+            className="w-16 h-1" style={{ accentColor: '#f0a030' }} />
+          <span className="text-xs text-[#9090a8] w-4">{maskBrushSize}</span>
+          <span className="text-xs text-[#5a5a70]">Smooth:</span>
+          <input type="range" min={0} max={5} step={1} value={maskBrushSmoothing}
+            onChange={e => setMaskBrushSmoothing(parseInt(e.target.value))}
+            className="w-12 h-1" style={{ accentColor: '#f0a030' }} />
+          <span className="text-xs text-[#5a5a70]">Feather:</span>
+          <input type="range" min={0} max={20} value={maskBrushFeather}
+            onChange={e => setMaskBrushFeather(parseFloat(e.target.value))}
+            className="w-12 h-1" style={{ accentColor: '#f0a030' }} />
+          <span className="text-xs text-[#9090a8] w-6">{maskBrushFeather}</span>
         </div>
       )}
 

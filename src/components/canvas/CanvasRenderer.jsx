@@ -1,6 +1,8 @@
 import React, { useMemo, useEffect, useRef } from 'react';
 import { useEditorStore } from '../../stores/editorStore.js';
 import { getLayerValueAtFrame } from '../../engine/project.js';
+import { getPositionAlongPath } from '../../engine/motionpath/motionPathEngine.js';
+import { applyEasing } from '../../engine/animation/easingEngine.js';
 import { colorToCSS } from '../../utils/colorUtils.js';
 import { SnapGuides } from './SnapGuides.jsx';
 import lottie from 'lottie-web';
@@ -181,6 +183,29 @@ export function LayerRenderer({ layerId, frame, project, outlineMode }) {
     ?? layer.transform?.rotation ?? 0;
   const opacity = getLayerValueAtFrame(project, layerId, 'opacity', frame)
     ?? layer.opacity ?? 1;
+
+  // ── Motion Path ────────────────────────────────────────────────────────────
+  if (layer.motionPathId && project.motionPaths) {
+    const motionPath = project.motionPaths.find(mp => mp.id === layer.motionPathId);
+    if (motionPath && motionPath.pathData) {
+      // Find keyframes for motion path progress or interpolate from layer's inFrame/outFrame
+      const motionKeyframes = project.keyframes.filter(
+        kf => kf.layerId === layerId && (kf.property === 'transform.position' || kf.property === 'motionPathProgress')
+      );
+      // Simple interpolation: progress based on current frame within inFrame/outFrame
+      const startF = layer.inFrame ?? 0;
+      const endF = layer.outFrame ?? project.totalFrames;
+      const progress = Math.max(0, Math.min(1, (frame - startF) / Math.max(1, endF - startF)));
+      // Consider easing from motion path
+      const easedProgress = motionPath.easing ? applyEasing(progress, motionPath.easing) : progress;
+      const motionPos = getPositionAlongPath(motionPath.pathData, easedProgress);
+      // Override position with motion path position
+      pos = { x: motionPos.x, y: motionPos.y };
+      if (motionPath.orientToPath) {
+        rotation = motionPos.angle + (motionPath.rotationOffset || 0);
+      }
+    }
+  }
 
   // Anchor point — used as center of rotation/scale
   const anchor = layer.transform?.anchor || { x: 0, y: 0 };
