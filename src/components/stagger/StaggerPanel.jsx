@@ -13,6 +13,7 @@ export function StaggerPanel({ onClose }) {
   const [reverse, setReverse] = useState(false);
   const [randomVariation, setRandomVariation] = useState(0);
   const [seed, setSeed] = useState(42);
+  const [preserveDuration, setPreserveDuration] = useState(true);
   const [noKfWarning, setNoKfWarning] = useState(false);
   const [property, setProperty] = useState('opacity');
 
@@ -43,7 +44,7 @@ export function StaggerPanel({ onClose }) {
     }
 
     const result = applyStagger(layers, keyframeGroups, {
-      order, delay, overlap, reverse, randomVariation, seed,
+      order, delay, overlap, reverse, randomVariation, seed, preserveDuration,
     });
 
     // Apply shifted keyframes
@@ -138,6 +139,12 @@ export function StaggerPanel({ onClose }) {
           <span className="text-xs text-[#9090a8]">Reverse</span>
         </label>
       </div>
+
+      {/* Preserve duration */}
+      <label className="flex items-center gap-1.5 cursor-pointer">
+        <input type="checkbox" checked={preserveDuration} onChange={e => setPreserveDuration(e.target.checked)} className="accent-[#7b68ee]" />
+        <span className="text-xs text-[#9090a8]">Preserve Duration</span>
+      </label>
 
       {/* Preview */}
       <div className="p-2 rounded bg-[#1a1a22] border border-[#2e2e3a]">
