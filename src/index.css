@@ -1,0 +1,318 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════
+   Base Styles
+═══════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #0f0f11;
+  color: #f0f0f5;
+  user-select: none;
+}
+
+/* ═══════════════════════════════════════
+   Scrollbar Styles
+═══════════════════════════════════════ */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #3a3a50;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #5a5a78;
+}
+
+/* ═══════════════════════════════════════
+   Canvas Checkerboard
+═══════════════════════════════════════ */
+.canvas-checkerboard {
+  background-image:
+    linear-gradient(45deg, #2a2a30 25%, transparent 25%),
+    linear-gradient(-45deg, #2a2a30 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #2a2a30 75%),
+    linear-gradient(-45deg, transparent 75%, #2a2a30 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+  background-color: #222226;
+}
+
+/* ═══════════════════════════════════════
+   Panel Base
+═══════════════════════════════════════ */
+.panel {
+  @apply bg-[#16161a] border border-[#2e2e3a];
+}
+
+.panel-header {
+  @apply flex items-center justify-between px-3 py-2 border-b border-[#2e2e3a] text-xs font-semibold text-[#9090a8] uppercase tracking-wider;
+}
+
+/* ═══════════════════════════════════════
+   Button Variants
+═══════════════════════════════════════ */
+.btn {
+  @apply inline-flex items-center justify-center gap-1.5 rounded text-xs font-medium transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-[#7b68ee]/50;
+}
+
+.btn-icon {
+  @apply btn w-7 h-7 text-[#9090a8] hover:text-[#f0f0f5] hover:bg-[#22222a];
+}
+
+.btn-icon.active {
+  @apply text-[#a08fff] bg-[#2a2a35];
+}
+
+.btn-sm {
+  @apply btn px-2 py-1 text-xs;
+}
+
+.btn-primary {
+  @apply btn px-3 py-1.5 bg-[#7b68ee] hover:bg-[#6a57dd] text-white;
+}
+
+.btn-ghost {
+  @apply btn px-2 py-1 text-[#9090a8] hover:text-[#f0f0f5] hover:bg-[#22222a];
+}
+
+.btn-danger {
+  @apply btn px-3 py-1.5 bg-[#f04060] hover:bg-[#d03050] text-white;
+}
+
+/* ═══════════════════════════════════════
+   Input Styles
+═══════════════════════════════════════ */
+.input {
+  @apply bg-[#22222a] border border-[#2e2e3a] rounded text-xs text-[#f0f0f5] px-2 py-1 outline-none focus:border-[#7b68ee] focus:ring-1 focus:ring-[#7b68ee]/30 transition-colors;
+}
+
+.input-sm {
+  @apply input text-2xs py-0.5;
+}
+
+.input-number {
+  @apply input w-16 text-center font-mono;
+}
+
+/* ═══════════════════════════════════════
+   Keyframe Diamond
+═══════════════════════════════════════ */
+.keyframe-diamond {
+  width: 8px;
+  height: 8px;
+  background: #f0a030;
+  transform: rotate(45deg);
+  border-radius: 1px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.keyframe-diamond:hover {
+  transform: rotate(45deg) scale(1.3);
+  background: #ffc060;
+}
+
+.keyframe-diamond.selected {
+  background: #7b68ee;
+  box-shadow: 0 0 6px rgba(123,104,238,0.6);
+}
+
+/* ═══════════════════════════════════════
+   Timeline
+═══════════════════════════════════════ */
+.timeline-ruler-tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #3a3a50;
+  pointer-events: none;
+}
+
+.playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #f04060;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.playhead::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -5px;
+  width: 11px;
+  height: 11px;
+  background: #f04060;
+  clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
+  transform: rotate(180deg);
+}
+
+/* ═══════════════════════════════════════
+   Tooltip
+═══════════════════════════════════════ */
+.tooltip {
+  @apply absolute z-50 px-2 py-1 text-xs bg-[#0a0a0f] border border-[#3a3a50] rounded shadow-popup text-[#f0f0f5] pointer-events-none whitespace-nowrap;
+}
+
+/* ═══════════════════════════════════════
+   Drag handles & selection
+═══════════════════════════════════════ */
+.selection-box {
+  stroke: #7b68ee;
+  stroke-width: 1;
+  fill: rgba(123, 104, 238, 0.08);
+  stroke-dasharray: 4 2;
+}
+
+.transform-handle {
+  fill: #7b68ee;
+  stroke: #fff;
+  stroke-width: 1;
+  cursor: grab;
+  r: 5;
+}
+
+.transform-handle:hover {
+  fill: #a08fff;
+  r: 6;
+}
+
+/* ═══════════════════════════════════════
+   Layer row
+═══════════════════════════════════════ */
+.layer-row {
+  @apply flex items-center gap-1 px-2 py-1 cursor-pointer hover:bg-[#22222a] transition-colors;
+}
+
+.layer-row.selected {
+  @apply bg-[#2a2a35] border-l-2 border-[#7b68ee];
+}
+
+/* ═══════════════════════════════════════
+   Color swatch
+═══════════════════════════════════════ */
+.color-swatch {
+  @apply w-6 h-6 rounded cursor-pointer border-2 border-transparent hover:border-white/30 transition-all;
+}
+
+.color-swatch.selected {
+  @apply border-white;
+}
+
+/* ═══════════════════════════════════════
+   Gradient track
+═══════════════════════════════════════ */
+.gradient-track {
+  @apply relative w-full h-6 rounded cursor-crosshair;
+  background-image: linear-gradient(45deg, #333 25%, transparent 25%),
+    linear-gradient(-45deg, #333 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #333 75%),
+    linear-gradient(-45deg, transparent 75%, #333 75%);
+  background-size: 8px 8px;
+  background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+  background-color: #1a1a1a;
+}
+
+/* ═══════════════════════════════════════
+   Animations
+═══════════════════════════════════════ */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #22222a 0%, #2e2e3a 50%, #22222a 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ═══════════════════════════════════════
+   Easing preview curve
+═══════════════════════════════════════ */
+.easing-preview svg {
+  display: block;
+}
+
+/* ═══════════════════════════════════════
+   Resize panel splitter
+═══════════════════════════════════════ */
+[data-panel-group-direction="horizontal"] > [data-panel-resize-handle-id] {
+  width: 3px;
+  background: transparent;
+  cursor: col-resize;
+  transition: background 0.15s;
+}
+[data-panel-group-direction="horizontal"] > [data-panel-resize-handle-id]:hover {
+  background: #7b68ee;
+}
+[data-panel-group-direction="vertical"] > [data-panel-resize-handle-id] {
+  height: 3px;
+  background: transparent;
+  cursor: row-resize;
+  transition: background 0.15s;
+}
+[data-panel-group-direction="vertical"] > [data-panel-resize-handle-id]:hover {
+  background: #7b68ee;
+}
+
+/* ═══════════════════════════════════════
+   Number input drag
+═══════════════════════════════════════ */
+.number-drag {
+  cursor: ew-resize;
+}
+
+/* ═══════════════════════════════════════
+   Onion skin
+═══════════════════════════════════════ */
+.onion-past {
+  opacity: 0.3;
+  tint: #0070ff;
+}
+.onion-future {
+  opacity: 0.3;
+  tint: #ff4000;
+}
+
+/* ═══════════════════════════════════════
+   Light mode overrides
+═══════════════════════════════════════ */
+.light {
+  background: #f5f5fa;
+  color: #1a1a2e;
+}
+
+.light .panel {
+  background: #ffffff;
+  border-color: #e0e0ea;
+}
