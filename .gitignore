@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Framekeeper native host and Python environment (machine-specific paths)
+helper/.venv/
+helper/.installed/
+*.pyc

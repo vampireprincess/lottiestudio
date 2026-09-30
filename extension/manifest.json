@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Framekeeper — Personal Video Saver",
+  "short_name": "Framekeeper",
+  "description": "Save individual TikTok, Instagram and Facebook videos locally with your own yt-dlp helper. Personal use only.",
+  "version": "0.1.0",
+  "minimum_chrome_version": "120",
+  "permissions": ["tabs", "storage", "contextMenus", "nativeMessaging", "notifications", "clipboardRead", "downloads"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Save video with Framekeeper",
+    "default_icon": {"16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png"}
+  },
+  "background": {"service_worker": "background.js"},
+  "icons": {"16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png"},
+  "content_scripts": [{
+    "matches": [
+      "https://tiktok.com/*", "https://*.tiktok.com/*",
+      "https://instagram.com/*", "https://*.instagram.com/*",
+      "https://facebook.com/*", "https://*.facebook.com/*",
+      "https://fb.watch/*", "https://*.fb.watch/*"
+    ],
+    "js": ["content.js"],
+    "run_at": "document_idle",
+    "all_frames": false
+  }],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; img-src 'self' https: data:;"
+  }
+}

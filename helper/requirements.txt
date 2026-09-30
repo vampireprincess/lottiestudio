@@ -1,0 +1,4 @@
+# Keep current: social-media extractors and TLS/browser impersonation change often.
+# July/August 2026 Instagram/TikTok fixes; curl-cffi is recommended by yt-dlp
+# for browser impersonation, which TikTok may require.
+yt-dlp[default,curl-cffi]>=2026.8.19
